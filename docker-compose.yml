@@ -1,0 +1,33 @@
+version: '3.3'
+services:
+  wefox:
+    container_name: wefox
+    environment:
+      - NODE_ENV=local
+    restart: 'unless-stopped'
+    image: wefox
+    ports:
+      - 3000:3000
+    networks:
+      - wefox-net
+    volumes:
+      - './src:/app/src'
+    build: .
+    command: ['npm', 'run', 'start:dev']
+
+  mongo:
+    container_name: mongo
+    image: mongo
+    restart: 'unless-stopped'
+    logging:
+      driver: none
+    volumes:
+      - './mongo:/mongo/db'
+    ports:
+      - 27017:27017
+    networks:
+      - wefox-net
+
+networks:
+  wefox-net:
+    driver: bridge
